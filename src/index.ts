@@ -1,5 +1,4 @@
-import { app, BrowserWindow } from 'electron';
-import path from "path";
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 
@@ -11,6 +10,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    title: require('package.json').productName,
     height: 600,
     width: 800,
     webPreferences: {
@@ -19,6 +19,10 @@ const createWindow = (): void => {
       nodeIntegration: false,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
+  });
+
+  mainWindow.on('page-title-updated', (e) => {
+    e.preventDefault()
   });
 
   // and load the index.html of the app.
@@ -52,3 +56,10 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+ipcMain.handle('show-open-folder-dialog', async (event) => {
+  const mainWindow = BrowserWindow.getFocusedWindow();
+  return await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory', 'multiSelections']
+  })
+})

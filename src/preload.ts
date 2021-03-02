@@ -1,19 +1,9 @@
-import { contextBridge, dialog, ipcRenderer } from "electron";
-
-console.log('preload loaded');
+import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld(
     'api', {
-        showMessageBox: (message: string) => {
-            dialog.showMessageBox({
-                type:'info',
-                title:'Info',
-                message:message,
-                buttons:['Howdy?','Alright']
-            }
-            ).then(result=>{
-               console.log(result.response)
-            })
+        showOpenFolderDialog: async (): Promise<Electron.OpenDialogReturnValue> => {
+            return await ipcRenderer.invoke('show-open-folder-dialog');
         },
     }
 );
@@ -21,7 +11,7 @@ contextBridge.exposeInMainWorld(
 declare global {
     interface Window {
         api: {
-            showMessageBox(message: string): void
+            showOpenFolderDialog: () => Promise<Electron.OpenDialogReturnValue>
         }
     }
 }
