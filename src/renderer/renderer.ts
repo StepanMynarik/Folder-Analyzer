@@ -26,9 +26,9 @@
  * ```
  */
 
-import './index.css';
+import './windows/home/index.css'
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
-import './app.tsx';
+import './components/app/app.tsx';

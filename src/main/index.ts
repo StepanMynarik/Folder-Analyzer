@@ -11,8 +11,8 @@ const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     title: require('package.json').productName,
-    height: 600,
     width: 800,
+    height: 600,
     webPreferences: {
       contextIsolation: true,
       enableRemoteModule: false,
